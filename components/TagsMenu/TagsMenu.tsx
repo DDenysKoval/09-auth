@@ -8,7 +8,7 @@ const TagsMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   
-  const tags = ['All', 'Work', 'Personal', 'Meeting', 'Shopping', 'Todo'];
+  const tags = ['All', 'Work', 'Personal', 'Meeting', 'Shopping', 'Todo', "Ideas", "Travel", "Finance", "Health", "Important"];
   
   return (
     <div className={css.menuContainer}>

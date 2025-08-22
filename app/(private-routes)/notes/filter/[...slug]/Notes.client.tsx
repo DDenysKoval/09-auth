@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { fetchNotes, NotesHttpResponse } from "@/lib/api";
 import { useDebouncedCallback } from "use-debounce";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import css from "./NotesPage.module.css"
 import Link from "next/link";
+import { fetchNotes, NotesHttpResponse } from "@/lib/api/clientApi";
 
 interface NotesClientProps {
   initialData: NotesHttpResponse,
