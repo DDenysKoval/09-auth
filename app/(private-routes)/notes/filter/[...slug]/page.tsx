@@ -1,6 +1,7 @@
-import { fetchNotes } from "@/lib/api/clientApi";
+
 import NotesClient from "./Notes.client"
 import { Metadata } from "next";
+import { fetchServerNotes } from "@/lib/api/serverApi";
 
 interface Props {
   params: Promise<{ slug: string[] }>;
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props):Promise<Metadata> {
 export default async function NotesByCategory({ params }: Props) {
   const { slug } = await params;
   const tag = slug[0] === "All" ? undefined : slug[0]
-  const initialData = await fetchNotes("", 1, tag );
+  const initialData = await fetchServerNotes("", 1, tag );
 
   return (
     <main >
