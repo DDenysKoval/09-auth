@@ -3,23 +3,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { checkServerSession } from "./lib/api/serverApi";
 import { parse } from "cookie";
 
-const privateRoutes = ["/profile"];
-const publicRoutes = ["/sign-in", "/sign-up"]
+const privateRoutes = ['/profile', '/notes'];
+const publicRoutes = ['/sign-in', '/sign-up'];
 
 export async function middleware(request:NextRequest) {
   const cookieStore = await cookies()
+  const { pathname } = request.nextUrl
   const accessToken = cookieStore.get("accessToken")?.value
   const refreshToken = cookieStore.get("refreshToken")?.value
-  const { pathname } = request.nextUrl
-  const isPrivateRoute = privateRoutes.some((route) => pathname.startsWith(route))
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
+  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+  const isPrivateRoute = privateRoutes.some((route) => pathname.startsWith(route));
   
   if (!accessToken) {
     if (refreshToken) {
-      const data = await checkServerSession()
-      const setCookie = data.headers['set-cookie']
-      if (setCookie) {
-        const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie]
+      const res = await checkServerSession()
+      const resCookie = res?.headers?.['set-cookie']
+      if (resCookie) {
+        const cookieArray = Array.isArray(resCookie) ? resCookie : [resCookie]
         for (const cookieStr of cookieArray) {
           const parsed = parse(cookieStr)
           const options = {
@@ -27,8 +27,8 @@ export async function middleware(request:NextRequest) {
             path: parsed.Path,
             maxAge: Number(parsed['Max-Age']),
           }
-          if (parsed.accessToken) cookieStore.set("accessToken", parsed.accessToken, options)
-          if (parsed.refreshToken) cookieStore.set("refreshToken", parsed.refreshToken, options)
+          if (parsed.accessToken) NextResponse.next().cookies.set("accessToken", parsed.accessToken, options)
+          if (parsed.refreshToken) NextResponse.next().cookies.set("refreshToken", parsed.refreshToken, options)
         }
         
         if (isPublicRoute) {
@@ -60,8 +60,9 @@ export async function middleware(request:NextRequest) {
   if (isPrivateRoute) {
     return NextResponse.next()
   }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/profile/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/profile/:path*', '/notes/:path*', '/sign-in', '/sign-up'],
 };

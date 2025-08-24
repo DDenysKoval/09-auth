@@ -12,6 +12,7 @@ const EditProfile = () => {
   const [username, setUsername] = useState("")
   const router = useRouter()
   const user = useAuthStore((state) => state.user)
+  const setUser = useAuthStore((state) => state.setUser)
 
   useEffect(() => {
     getMe().then((user) => {
@@ -25,7 +26,8 @@ const EditProfile = () => {
 
   const handleSaveUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await updateMe({ username})
+    const updatedUser = await updateMe({ username })
+    setUser(updatedUser)
     router.push("/profile")
   }
 
@@ -39,7 +41,8 @@ const EditProfile = () => {
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
 
-        <Image src="https://ac.goit.global/fullstack/react/default-avatar.jpg"
+        <Image
+          src={user?.avatar ?? "https://ac.goit.global/fullstack/react/default-avatar.jpg"}
           alt="User Avatar"
           width={120}
           height={120}

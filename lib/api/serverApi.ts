@@ -2,6 +2,7 @@ import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { cookies } from "next/headers";
 import { NotesHttpResponse } from "./clientApi";
+import { Note } from "@/types/note";
 
 
 
@@ -22,7 +23,7 @@ export const checkServerSession = async () => {
       Cookie: cookieStore.toString()
     }
   })
-  return response.data
+  return response
 }
 
 export const fetchServerNotes = async (search: string, page: number, tag: string|undefined) => {
@@ -41,4 +42,15 @@ export const fetchServerNotes = async (search: string, page: number, tag: string
     headers,
   })
   return response.data;
+}
+
+export const fetchServerNotebyId = async (noteId: string) => {
+  const cookieStore = await cookies()
+  
+  const response = await nextServer.get<Note>(`/notes/${noteId}`, {
+    headers: {
+      Cookie: cookieStore.toString()
+    }
+  })
+    return response.data;
 }
