@@ -1,18 +1,22 @@
 .menuContainer {
   position: relative;
-  display: inline-block;
+  display: flex;
+  height: 100%;
+  align-items: center;
 }
 
 .menuButton {
+  box-sizing: border-box;
   background-color: transparent;
   color: #fff;
   border: none;
-  padding: 8px 16px;
+  padding: 0 16px;
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.2s ease;
   line-height: 1;
+  height: 100%;
 }
 
 .menuButton:hover {
